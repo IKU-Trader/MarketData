@@ -81,27 +81,13 @@ def currentPath():
 def absPath(relative_path):
     return os.path.join(currentPath(), relative_path)
 
-def fxData(name, ta_params, years, months, interval_minutes):
-    dir_path = absPath(name)
-    files = []
-    for year in years:
-        for m in months:
-            path = os.path.join(dir_path, name + '_' + str(year) + str(m).zfill(2))
-            path = os.path.join(path, str(year) + str(m).zfill(2))
-            if os.path.exists(path):
-                l = Utils.fileList(path, '*.csv')
-                if len(l) > 0:
-                    files += l
-    candles = getCandles(files, str2time_fx)
-    tohlc = candles2tohlc(candles)
-    data = ResampleDataBuffer(tohlc, ta_params, interval_minutes)
-    return data    
+
     
     
 class MarketData:
 
     @staticmethod
-    def gold_data(ta_params, years, months, interval_minutes):
+    def golData(ta_params, years, months, interval_minutes):
         dir_path = absPath('gold')
         files = []
         for year in years:
@@ -117,12 +103,21 @@ class MarketData:
         return data
     
     @staticmethod
-    def gbpaud_data(ta_params, years, months, interval_minutes):
-        return fxData('GBPAUD', ta_params, years, months, interval_minutes)
-    
-    @staticmethod
-    def gbpjpy_data(ta_params, years, months, interval_minutes):
-        return fxData('GBPJPY', ta_params, years, months, interval_minutes)
+    def fxData(name, ta_params, years, months, interval_minutes):
+        dir_path = absPath(name)
+        files = []
+        for year in years:
+            for m in months:
+                path = os.path.join(dir_path, name + '_' + str(year) + str(m).zfill(2))
+                path = os.path.join(path, str(year) + str(m).zfill(2))
+                if os.path.exists(path):
+                    l = Utils.fileList(path, '*.csv')
+                    if len(l) > 0:
+                        files += l
+        candles = getCandles(files, str2time_fx)
+        tohlc = candles2tohlc(candles)
+        data = ResampleDataBuffer(tohlc, ta_params, interval_minutes)
+        return data    
     
     
        

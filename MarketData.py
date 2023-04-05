@@ -87,7 +87,7 @@ def absPath(relative_path):
 class MarketData:
 
     @staticmethod
-    def golData(ta_params, years, months, interval_minutes):
+    def goldData(ta_params, years, months, interval_minutes):
         dir_path = absPath('gold')
         files = []
         for year in years:
@@ -117,6 +117,7 @@ class MarketData:
         candles = getCandles(files, str2time_fx)
         tohlc = candles2tohlc(candles)
         data = ResampleDataBuffer(tohlc, ta_params, interval_minutes)
+
         return data    
     
     

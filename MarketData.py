@@ -9,6 +9,7 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../Utilities'))
 
+import numpy as np
 from Utils import Utils
 from TimeUtils import TimeUtils
 from DataBuffer import ResampleDataBuffer
@@ -87,7 +88,7 @@ def absPath(relative_path):
 class MarketData:
 
     @staticmethod
-    def goldData(ta_params, years, months, interval_minutes):
+    def goldData(years, months, interval_minutes):
         dir_path = absPath('gold')
         files = []
         for year in years:
@@ -99,11 +100,14 @@ class MarketData:
                         files += l
         candles = getCandles(files, str2time_gold)
         tohlc = candles2tohlc(candles)
-        data = ResampleDataBuffer(tohlc, ta_params, interval_minutes)
-        return data
+        return candles, tohlc
     
     @staticmethod
-    def fxData(name, ta_params, years, months, interval_minutes):
+    def fxData(name, years, months, interval_minutes):
+        if years is None:
+            years = np.arange(2017, 2024)
+        if months is None:
+            months = np.arange(1, 13)
         dir_path = absPath(name)
         files = []
         for year in years:
@@ -116,9 +120,5 @@ class MarketData:
                         files += l
         candles = getCandles(files, str2time_fx)
         tohlc = candles2tohlc(candles)
-        data = ResampleDataBuffer(tohlc, ta_params, interval_minutes)
-
-        return data    
+        return candles, tohlc
     
-    
-       

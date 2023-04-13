@@ -10,9 +10,9 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../Utilities'))
 
 import numpy as np
-from Utils import Utils
-from TimeUtils import TimeUtils
-from DataBuffer import ResampleDataBuffer
+from utils import Utils
+from time_utils import TimeUtils
+from data_buffer import ResampleDataBuffer
 from const import const
 from datetime import datetime
 

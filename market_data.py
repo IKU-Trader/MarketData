@@ -103,21 +103,24 @@ class MarketData:
         return candles, tohlc
     
     @staticmethod
-    def fxData(name, years, months, interval_minutes):
-        if years is None:
-            years = np.arange(2017, 2024)
-        if months is None:
-            months = np.arange(1, 13)
+    def fxData(name, from_year, from_month, to_year, to_month, interval_minutes):
         dir_path = absPath(name)
         files = []
-        for year in years:
-            for m in months:
-                path = os.path.join(dir_path, name + '_' + str(year) + str(m).zfill(2))
-                path = os.path.join(path, str(year) + str(m).zfill(2))
-                if os.path.exists(path):
-                    l = Utils.fileList(path, '*.csv')
-                    if len(l) > 0:
-                        files += l
+        year  = from_year
+        month = from_month
+        while True:
+            path = os.path.join(dir_path, name + '_' + str(year) + str(month).zfill(2))
+            path = os.path.join(path, str(year) + str(month).zfill(2))
+            if os.path.exists(path):
+                l = Utils.fileList(path, '*.csv')
+                if len(l) > 0:
+                    files += l
+            if year == to_year and month == to_month:
+                break        
+            month += 1
+            if month > 12:
+                year += 1
+                month = 1
         candles = getCandles(files, str2time_fx)
         tohlc = candles2tohlc(candles)
         return candles, tohlc
